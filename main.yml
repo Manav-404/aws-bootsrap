@@ -88,8 +88,15 @@ Resources:
         config:
           packages:
             yum:
-              wget: []
-              unzip: []
+              ruby: []
+          files:
+            /home/ec2-user/install:
+              source: !Sub "https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install"
+              mode: "000755"
+          commands:
+            00-install-cd-agent:
+              command: "./install auto"
+              cwd: "/home/ec2-user"
     Properties:
       ImageId: !Ref EC2AMI
       InstanceType: !Ref EC2InstanceType
@@ -126,11 +133,6 @@ Resources:
             nvm alias default v12.7.0
             nvm install v12.7.0
             nvm use v12.7.0
-
-            # Download latest code, unzip it into /home/ec2-user/app
-            wget https://github.com/Manav-404/aws-bootsrap/archive/main.zip
-            unzip main.zip
-            mv aws-bootsrap-main app
 
             # Create log directory
             mkdir -p /home/ec2-user/app/logs
